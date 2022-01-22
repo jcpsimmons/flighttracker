@@ -10,7 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Exposure {
+  id        Int @default(autoincrement()) @id 
+  createdAt DateTime
+  updatedAt DateTime
+  completed Boolean @default(value: false)
+  duration Int
+  origin String
+  destination String
+  distance Int
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
+// auth stuff
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -48,6 +61,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  exposures     Exposure[]
 }
 
 model VerificationToken {
