@@ -52,8 +52,4 @@ const Header: React.FC = () => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  return {};
-}
-
 export default Header;

@@ -2,26 +2,34 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 import Router from "next/router";
 import PlaneSpeeds from "../utils/planeData";
+import Spinner from "./elements/Spinner";
+import Button from "./elements/Button";
 
 const AddExposure = () => {
-  const [origin, setOrigin] = useState({});
-  const [destination, setDestination] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect((): void => {
     const poll = setInterval(() => {
       if (window?.AirportInput) {
         const options = {
-          formatting: `<div class="$(unique-result)"
-                       single-result" 
-                       data-index="$(i)"> 
-                     $(IATA) $(name)</div>`,
+          formatting: `<div class="$(unique-result)" data-index="$(i)">$(IATA) - $(name)</div>`,
         };
 
         window.AirportInput("origin", options);
         window.AirportInput("destination", options);
+
         clearInterval(poll);
       }
     }, 1000);
+
+    const checkLoading = setInterval(() => {
+      if (!!document.querySelector(".autocomplete-results.origin")) {
+        setTimeout(() => {
+          setIsLoading(false);
+          clearInterval(checkLoading);
+        }, 1000);
+      }
+    });
   }, []);
 
   const handleSubmit = async (e) => {
@@ -55,25 +63,52 @@ const AddExposure = () => {
   };
 
   return (
-    <div>
-      <h1>Add Exposure</h1>
-      <form onSubmit={handleSubmit} autoComplete="chrome-off">
-        <div>
-          <label htmlFor="name">Origin</label>
-          <input type="text" id="origin" autoComplete="new-password" />
+    <div className="border-black border-2 p-4 rounded text-center shadow-md shadow-gray-500 font-bold transition-all mb-52">
+      <div className="bg-black -ml-4 -mr-4 -mt-4 py-2 pt-4 text-white ">
+        <h1 className="text-center font-bold text-2xl mb-4">Add Exposure</h1>
+      </div>
+      {isLoading && <Spinner className="m-10" />}
+      <form
+        className={isLoading ? "hidden" : "block"}
+        onSubmit={handleSubmit}
+        autoComplete="off"
+      >
+        <div className="my-4 flex-col flex">
+          <label className="mb-2" htmlFor="name">
+            Where are you leaving from?
+          </label>
+          <input
+            className="w-full rounded-md border-2 border-black"
+            type="text"
+            id="origin"
+            autoComplete="new-password"
+            autoComplete="off"
+          />
         </div>
-        <div>
-          <label htmlFor="name">Destination</label>
-          <input type="text" id="destination" autoComplete="new-password" />
+        <div className="my-4 flex-col flex">
+          <label className="mb-2" htmlFor="name">
+            Where are you going to?
+          </label>
+          <input
+            className="w-full rounded-md border-2 border-black"
+            type="text"
+            id="destination"
+            autoComplete="new-password"
+            autoComplete="off"
+          />
         </div>
-        <div>
-          <select>
+        <div className="my-4 flex-col flex">
+          <label className="mb-2 w-full" htmlFor="airplane block">
+            What will you be flying in?
+          </label>
+          <select id="airplane" className="border-2 border-black">
             <option value="Boeing 737">Boeing 737</option>
           </select>
         </div>
-        <button type="submit">Submit</button>
+        <Button type="submit" size="md">
+          Submit
+        </Button>
       </form>
-      <Script src="https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js" />
     </div>
   );
 };

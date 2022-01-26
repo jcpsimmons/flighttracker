@@ -7,13 +7,12 @@ const Dashboard = ({ exposures }) => {
   const [isShowExposure, setIsShowExposure] = useState(false);
 
   return (
-    <div>
-      <h1>Exposure Planner</h1>
+    <div className="flex flex-col items-center">
+      <ExposureList {...{ exposures }} />{" "}
       {!isShowExposure && (
         <Button onClick={() => setIsShowExposure(true)}>+</Button>
       )}
       {isShowExposure && <AddExposure {...{ setIsShowExposure }} />}
-      <ExposureList {...{ exposures }} />
     </div>
   );
 };

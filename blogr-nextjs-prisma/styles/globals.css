@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.autocomplete-wrapper {
+  position: relative;
+}
+
+.autocomplete-wrapper .autocomplete-results {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  /* width: 100%; */
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
+.autocomplete-wrapper .autocomplete-results .autocomplete-result:hover {
+  background: #f5f5f5;
+  z-index: 99;
+}

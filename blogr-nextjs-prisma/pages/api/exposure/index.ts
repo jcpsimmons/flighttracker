@@ -20,7 +20,6 @@ export default async function handle(req, res) {
     iata: destinationName,
   } = destination;
 
-  console.log(originLat);
   const distance =
     greatCircleDistance({
       lat1: originLat,
