@@ -16,10 +16,14 @@ model Exposure {
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   completed Boolean @default(value: false)
   plane     String
+  speed     Int
+  distance Int
   originLat Float
   originLon Float
+  originName String
   destinationLat Float
   destinationLon Float
+  destinationName String
   userId String?
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

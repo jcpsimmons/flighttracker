@@ -1,32 +1,45 @@
 import { getSession } from "next-auth/react";
 import { NextApiRequest, NextApiResponse } from "next";
+import { greatCircleDistance } from "great-circle-distance";
 import prisma from "../../../lib/prisma";
+import PlaneSpeeds from "../../../utils/planeData";
 
 // POST /api/exposure
-// Required fields in body: title
-// Optional fields in body: content
 export default async function handle(req, res) {
   const { destination, origin, plane } = req.body;
+  const speed = PlaneSpeeds[plane] as unknown as number;
 
   const {
     latitude: originLat,
     longitude: originLon,
-    name: originName,
+    iata: originName,
   } = origin;
   const {
     latitude: destinationLat,
     longitude: destinationLon,
-    name: destinationName,
+    iata: destinationName,
   } = destination;
 
-  const session = await getSession({ req });
+  console.log(originLat);
+  const distance =
+    greatCircleDistance({
+      lat1: originLat,
+      lng1: originLon,
+      lat2: destinationLat,
+      lng2: destinationLon,
+    }) * 0.62137;
+
   const result = await prisma.exposure.create({
     data: {
       originLat,
       originLon,
+      originName,
       destinationLat,
       destinationLon,
+      destinationName,
       plane,
+      distance: parseInt(distance.toFixed(0)),
+      speed,
     },
   });
   res.json(result);

@@ -1,13 +1,20 @@
 import { useEffect } from "react";
 import prisma from "../lib/prisma";
+import { greatCircleDistance } from "great-circle-distance";
+import PlaneSpeeds from "../utils/planeData";
 
-const Exposure = ({ exp: { destination, origin } }) => {
+const Exposure = ({
+  exp: { destinationName, originName, distance, speed, plane, completed },
+}) => {
   return (
     <div>
       <h1>
-        {origin}-{">"}
-        {destination}
+        {originName}-{">"}
+        {destinationName}
       </h1>
+      <p>{distance} miles</p>
+      <p>{plane}</p>
+      <p>{speed} mph</p>
     </div>
   );
 };
@@ -15,9 +22,11 @@ const Exposure = ({ exp: { destination, origin } }) => {
 const ExposureList = ({ exposures }) => {
   return (
     <div>
-      {exposures.map((exp) => (
-        <Exposure {...{ exp }} />
-      ))}
+      {exposures
+        .sort((a, b) => a.distance - b.distance)
+        .map((exp) => (
+          <Exposure {...{ exp }} />
+        ))}
     </div>
   );
 };

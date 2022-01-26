@@ -14,9 +14,7 @@ const Main: React.FC<{}> = ({ exposures }) => {
 };
 
 export async function getStaticProps() {
-  const exposures = await prisma.exposure.findMany({
-    where: { userId: { equals: "ckypv0c0s000622pet73afj9l" } },
-  });
+  const exposures = await prisma.exposure.findMany();
   return {
     props: {
       exposures: exposures,

@@ -1,6 +1,7 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import Router from "next/router";
+import PlaneSpeeds from "../utils/planeData";
 
 const AddExposure = () => {
   const [origin, setOrigin] = useState({});
@@ -26,17 +27,20 @@ const AddExposure = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const [originEl, destinationEl] = e.target;
+    const [originEl, destinationEl, planeEl] = e.target;
     const origin = extractGeoData(originEl);
     const destination = extractGeoData(destinationEl);
+    const plane = planeEl.value;
+    const speed = PlaneSpeeds[plane];
 
     try {
-      const body = { origin, destination, plane: "boeing whatever" };
+      const body = { origin, destination, plane, speed };
       await fetch("/api/exposure", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+      Router.reload();
     } catch (error) {
       console.error(error);
     }
@@ -45,9 +49,9 @@ const AddExposure = () => {
   const extractGeoData = (el) => {
     const longitude = parseFloat(el.dataset.lon);
     const latitude = parseFloat(el.dataset.lat);
-    const name = el.dataset.iata;
+    const iata = el.dataset.iata;
 
-    return { latitude, longitude, name };
+    return { latitude, longitude, iata };
   };
 
   return (
@@ -56,11 +60,16 @@ const AddExposure = () => {
       <form onSubmit={handleSubmit} autoComplete="chrome-off">
         <div>
           <label htmlFor="name">Origin</label>
-          <input type="text" id="origin" />
+          <input type="text" id="origin" autoComplete="new-password" />
         </div>
         <div>
           <label htmlFor="name">Destination</label>
-          <input type="text" id="destination" />
+          <input type="text" id="destination" autoComplete="new-password" />
+        </div>
+        <div>
+          <select>
+            <option value="Boeing 737">Boeing 737</option>
+          </select>
         </div>
         <button type="submit">Submit</button>
       </form>
