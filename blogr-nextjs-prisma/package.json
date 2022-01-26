@@ -8,7 +8,8 @@
     "start": "next start",
     "pushdb": "npx prisma db push",
     "updateclient": "npx prisma generate",
-    "db": "npx prisma studio"
+    "db": "npx prisma studio",
+    "alldb": "npx prisma generate && npx prisma db push && npx prisma studio"
   },
   "keywords": [],
   "author": "",
@@ -16,11 +17,13 @@
   "dependencies": {
     "@next-auth/prisma-adapter": "^0.5.2-next.19",
     "@prisma/client": "^3.8.1",
+    "babel-plugin-superjson-next": "^0.4.2",
     "next": "12.0.8",
     "next-auth": "^4.1.2",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-markdown": "5.0.2"
+    "react-markdown": "5.0.2",
+    "superjson": "^1.8.0"
   },
   "devDependencies": {
     "@types/next-auth": "3.1.14",

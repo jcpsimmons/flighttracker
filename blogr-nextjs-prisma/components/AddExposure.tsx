@@ -1,9 +1,10 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import Router from "next/router";
 
 const AddExposure = () => {
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
+  const [origin, setOrigin] = useState({});
+  const [destination, setDestination] = useState({});
 
   useEffect((): void => {
     const poll = setInterval(() => {
@@ -22,23 +23,40 @@ const AddExposure = () => {
     }, 1000);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const [originEl, destinationEl] = e.target;
+    const origin = extractGeoData(originEl);
+    const destination = extractGeoData(destinationEl);
+
+    try {
+      const body = { origin, destination, plane: "boeing whatever" };
+      await fetch("/api/exposure", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleChange = (e) => {
-    const longitude = e.target.getAttribute("data-lon");
-    const latitude = e.target.getAttribute("data-lat");
-    console.log(x);
+  const extractGeoData = (el) => {
+    const longitude = parseFloat(el.dataset.lon);
+    const latitude = parseFloat(el.dataset.lat);
+    const name = el.dataset.iata;
+
+    return { latitude, longitude, name };
   };
 
   return (
     <div>
       <h1>Add Exposure</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="chrome-off">
         <div>
           <label htmlFor="name">Origin</label>
-          <input type="text" id="origin" onChange={() => handleChange(this)} />
+          <input type="text" id="origin" />
         </div>
         <div>
           <label htmlFor="name">Destination</label>
@@ -52,3 +70,9 @@ const AddExposure = () => {
 };
 
 export default AddExposure;
+
+declare global {
+  interface Window {
+    AirportInput: any;
+  }
+}
