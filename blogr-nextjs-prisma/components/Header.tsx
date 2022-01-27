@@ -11,7 +11,7 @@ const Header: React.FC = () => {
   const { data: session, status } = useSession();
 
   return (
-    <nav className="flex justify-between border-b-2 border-black bg-white">
+    <nav className="flex justify-between border-b-2 border-black bg-white text-2xl py-2 px-8">
       {status == "loading" ? (
         <div>Loading...</div>
       ) : (

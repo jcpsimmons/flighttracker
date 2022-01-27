@@ -4,26 +4,23 @@ import Layout from "../components/Layout";
 import Script from "next/script";
 import Post, { PostProps } from "../components/Post";
 import prisma from "../lib/prisma";
-import Dashboard from "../components/Dashboard";
 
-const Main: React.FC<{}> = ({ exposures }) => {
+import { getSession } from "next-auth/react";
+
+const Main: React.FC<{}> = () => {
   return (
     <>
       <Layout>
-        <Dashboard {...{ exposures }} />
+        <h1>this is the index - you gotta log in or go to /dashboard</h1>
       </Layout>
-      <Script src="https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js" />
     </>
   );
 };
 
-export async function getStaticProps() {
-  const exposures = await prisma.exposure.findMany();
-  return {
-    props: {
-      exposures: exposures,
-    },
-  };
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  // redirect to dashboard if logged in...
+  // const exposures = await prisma.exposure.findMany();
 }
 
 export default Main;

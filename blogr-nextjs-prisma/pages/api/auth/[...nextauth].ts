@@ -15,4 +15,10 @@ export default NextAuth({
   ],
   adapter: PrismaAdapter(prisma),
   secret: process.env.SECRET,
+  callbacks: {
+    session: async ({ session, user }) => {
+      session.userId = user.id;
+      return Promise.resolve(session);
+    },
+  },
 });
