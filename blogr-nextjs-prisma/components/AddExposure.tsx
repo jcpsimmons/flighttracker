@@ -1,5 +1,6 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 import Router from "next/router";
 import PlaneSpeeds from "../utils/planeData";
 import Spinner from "./elements/Spinner";
@@ -7,6 +8,17 @@ import Button from "./elements/Button";
 
 const AddExposure = () => {
   const [isLoading, setIsLoading] = useState(true);
+
+  const debounced = useDebouncedCallback(() => {
+    const entries = document.querySelectorAll(
+      ".autocomplete-results .autocomplete-result"
+    );
+    entries.forEach((entry) => {
+      if (entry.textContent.includes("\\N")) {
+        entry.remove();
+      }
+    });
+  }, 250);
 
   useEffect((): void => {
     const poll = setInterval(() => {
@@ -31,6 +43,8 @@ const AddExposure = () => {
       }
     });
   }, []);
+
+  const clearBadEntries = () => {};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,8 +95,8 @@ const AddExposure = () => {
             className="w-full rounded-md border-2 border-black"
             type="text"
             id="origin"
-            autoComplete="new-password"
             autoComplete="off"
+            onChange={debounced}
           />
         </div>
         <div className="my-4 flex-col flex">
@@ -93,8 +107,8 @@ const AddExposure = () => {
             className="w-full rounded-md border-2 border-black"
             type="text"
             id="destination"
-            autoComplete="new-password"
             autoComplete="off"
+            onChange={debounced}
           />
         </div>
         <div className="my-4 flex-col flex">

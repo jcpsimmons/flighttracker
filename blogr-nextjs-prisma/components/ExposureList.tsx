@@ -12,9 +12,9 @@ const Exposure = ({
     <div
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
-      className="rounded m-8 p-2 shadow-md shadow-gray-500  border-2 border-black text-center max-w-[12rem] p bg-white  transition-all cursor-pointer"
+      className="rounded m-8 p-2 shadow-md shadow-gray-500  border-2 border-black text-center max-w-[24rem] p bg-white  transition-all cursor-pointer pb-6 px-6 "
     >
-      <div className="bg-black -mt-2 -ml-2 -mr-2 p-2 mb-2">
+      <div className="bg-black -mt-2 -ml-6 -mr-6 p-2 mb-2">
         <h1 className="text-2xl text-yellow-400 font-bold">
           {originName}-{">"}
           {destinationName}

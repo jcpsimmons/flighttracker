@@ -11,13 +11,15 @@
   top: 100%;
   left: 50%;
   transform: translate(-50%, 0);
-  /* width: 100%; */
-  padding-left: 1rem;
-  padding-right: 1rem;
+  width: 100%;
+
   background: white;
   display: flex;
   flex-direction: column;
-  white-space: nowrap;
+  z-index: 10;
+  text-align: center;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 }
 
 .autocomplete-wrapper .autocomplete-results .autocomplete-result:hover {
