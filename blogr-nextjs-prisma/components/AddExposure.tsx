@@ -6,7 +6,7 @@ import PlaneSpeeds from "../utils/planeData";
 import Spinner from "./elements/Spinner";
 import Button from "./elements/Button";
 
-const AddExposure = () => {
+const AddExposure = ({ refetchExposures, setIsShowExposure }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const debounced = useDebouncedCallback(() => {
@@ -46,10 +46,11 @@ const AddExposure = () => {
 
   const clearBadEntries = () => {};
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const [originEl, destinationEl, planeEl] = e.target;
+    const [originEl, destinationEl, planeEl] =
+      e.target as unknown as HTMLInputElement[];
     const origin = extractGeoData(originEl);
     const destination = extractGeoData(destinationEl);
     const plane = planeEl.value;
@@ -62,7 +63,8 @@ const AddExposure = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      Router.reload();
+      refetchExposures();
+      setIsShowExposure(false);
     } catch (error) {
       console.error(error);
     }
@@ -77,7 +79,7 @@ const AddExposure = () => {
   };
 
   return (
-    <div className="border-black border-2 p-4 rounded text-center shadow-md shadow-gray-500 font-bold transition-all mb-52">
+    <div className="border-black border-2 p-4 mt-4 rounded text-center shadow-md shadow-gray-500 font-bold transition-all mb-52 bg-white">
       <div className="bg-black -ml-4 -mr-4 -mt-4 py-2 pt-4 text-white ">
         <h1 className="text-center font-bold text-2xl mb-4">Add Exposure</h1>
       </div>

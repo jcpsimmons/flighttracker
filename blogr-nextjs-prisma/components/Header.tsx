@@ -11,34 +11,21 @@ const Header: React.FC = () => {
   const { data: session, status } = useSession();
 
   return (
-    <nav className="flex justify-between border-b-2 border-black bg-white text-2xl py-2 px-8">
+    <nav className="flex justify-between border-b-2 border-black bg-white  py-3 px-8 bg-slate-800 text-white items-center sm:flex-row flex-col">
       {status == "loading" ? (
         <div>Loading...</div>
       ) : (
         <>
           <div>
-            <Link href="/">
-              <a className="bold" data-active={isActive("/")}>
-                Home
-              </a>
-            </Link>
+            <h1 className="font-bold text-2xl">Exposure Tracker</h1>
           </div>
           <div>
             {session ? (
-              <div className="flex flex-col">
-                <p>
-                  {session.user.name} ({session.user.email})
-                </p>
-                <div className="flex justify-between">
-                  <Link href="/create">
-                    <button>
-                      <a>Add</a>
-                    </button>
-                  </Link>
-                  <button onClick={() => signOut()}>
-                    <a>Log out</a>
-                  </button>
-                </div>
+              <div className="flex flex-row text-gray-400">
+                <p className="pr-2">{session.user.email}</p>
+                <button onClick={() => signOut()}>
+                  <a className="text-sm hover:underline">(Log out)</a>
+                </button>
               </div>
             ) : (
               <Link href="/api/auth/signin">

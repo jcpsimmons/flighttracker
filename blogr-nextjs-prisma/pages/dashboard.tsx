@@ -6,20 +6,38 @@ import { getSession, useSession } from "next-auth/react";
 import Layout from "../components/Layout";
 import Script from "next/script";
 
-const Dashboard = ({ exposures }) => {
-  // const { data: session, status } = useSession();
+const Dashboard = ({ initialExposures }) => {
+  const [exposures, setExposures] = useState([]);
+  const { data: session } = useSession();
 
   const [isShowExposure, setIsShowExposure] = useState(false);
+
+  useState(() => {
+    setExposures(initialExposures);
+  }, [initialExposures]);
+
+  const refetchExposures = async () => {
+    const res = await fetch("http://localhost:3000/api/exposure", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    setExposures(data.exposures);
+  };
 
   return (
     <>
       <Layout>
         <div className="flex flex-col items-center">
-          <ExposureList {...{ exposures }} />{" "}
+          <ExposureList {...{ exposures, setExposures }} />{" "}
           {!isShowExposure && (
             <Button onClick={() => setIsShowExposure(true)}>+</Button>
           )}
-          {isShowExposure && <AddExposure {...{ setIsShowExposure }} />}
+          {isShowExposure && (
+            <AddExposure {...{ setIsShowExposure, refetchExposures }} />
+          )}
         </div>
       </Layout>
       <Script src="https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js" />
@@ -36,10 +54,10 @@ export async function getServerSideProps(context) {
     },
   });
   const data = await res.json();
-  console.log(data);
+
   return {
     props: {
-      exposures: data.exposures,
+      initialExposures: data.exposures,
     },
   };
 }

@@ -7,11 +7,10 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = (props) => (
-  <div>
-    <Clouds />
+  <Clouds>
     <Header />
     <div className="layout">{props.children}</div>
-  </div>
+  </Clouds>
 );
 
 export default Layout;
