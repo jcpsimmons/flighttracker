@@ -53,6 +53,15 @@ export async function getServerSideProps(context) {
       cookie: context.req.headers.cookie,
     },
   });
+  if (res.status === 401) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+      props: {},
+    };
+  }
   const data = await res.json();
 
   return {

@@ -22,6 +22,7 @@ const Clouds = ({ children }) => {
             className={`${styles.cloud}`}
             key={i}
             style={{
+              marginLeft: "120%",
               animation: getRandomAnimation(),
               animationDelay: `${Math.floor(Math.random() * 20)}s`,
               opacity: `${Math.random() * 0.8 + 0.2}`,

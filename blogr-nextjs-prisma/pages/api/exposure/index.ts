@@ -52,48 +52,47 @@ export default async function handle(req, res) {
     res.json(result);
   } else if (req.method === "GET") {
     const session = await getSession({ req });
-    const { userId } = session;
-    if (!userId) {
-      res.status(401).end();
-    } else {
-      const exposures = await prisma.exposure.findMany({
-        where: {
-          user: {
-            id: userId,
-          },
-        },
-      });
+    !session && res.status(401).end();
 
-      res.json({ exposures });
-    }
+    const { userId } = session;
+
+    const exposures = await prisma.exposure.findMany({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+
+    res.json({ exposures });
+
     res.status(200).end();
   } else if (req.method === "DELETE") {
     const session = await getSession({ req });
+    !session && res.status(401).end();
     const { userId } = session;
-    if (!userId) {
-      res.status(401).end();
-    } else {
-      const { id } = req.body;
-      console.log("id :>> ", id);
-      await prisma.exposure.update({
-        where: {
-          id,
-        },
-        data: {
-          completed: true,
-        },
-      });
 
-      const exposures = await prisma.exposure.findMany({
-        where: {
-          user: {
-            id: userId,
-          },
-        },
-      });
+    const { id } = req.body;
+    console.log("id :>> ", id);
+    await prisma.exposure.update({
+      where: {
+        id,
+      },
+      data: {
+        completed: true,
+      },
+    });
 
-      res.json({ exposures });
-    }
+    const exposures = await prisma.exposure.findMany({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+
+    res.json({ exposures });
+
     res.status(200).end();
   } else {
     res.status(405).end();

@@ -11,16 +11,18 @@ const Main: React.FC<{}> = () => {
   return (
     <>
       <Layout>
-        <h1>this is the index - you gotta log in or go to /dashboard</h1>
+        <div className="text-4xl font-bold text-center bg-white p-48">
+          <h1>this is the index - you gotta log in or go to /dashboard</h1>
+        </div>
       </Layout>
     </>
   );
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  // redirect to dashboard if logged in...
-  // const exposures = await prisma.exposure.findMany();
-}
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context);
+//   // redirect to dashboard if logged in...
+//   // const exposures = await prisma.exposure.findMany();
+// }
 
 export default Main;
